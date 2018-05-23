@@ -16,6 +16,38 @@ class Note extends Component {
     this.renderForm = this.renderForm.bind(this);
     this.renderDisplay = this.renderDisplay.bind(this);
     this.save = this.save.bind(this);
+    this.randomBetween = this.randomBetween.bind(this);
+  }
+
+
+//it will fire before render the component
+  componentWillMount() {
+    this.style = {
+      right: this.randomBetween(0, window.innerWidth - 150, 'px'),
+      top: this.randomBetween(0, window.innerHeight - 150, 'px'),
+      transform: `rotate(${this.randomBetween(-25, 25, 'deg')})`
+    }
+  }
+
+  componentDidUpdate() {
+    var textArea;
+    if (this.state.editing) {
+      textArea = this._newText;
+      textArea.focus();
+      textArea.select();
+    }
+  }
+
+  //So this is just going to make sure that something has actually changed.
+  // If something has changed, then we'll re-render. If something hasn't, then we won't.
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+        this.props.children !== nextProps.children || this.state !== nextState
+    )
+  }
+
+  randomBetween(x, y, s) {
+    return x + Math.ceil(Math.random() * (y - x)) + s;
   }
 
   edit() {
@@ -40,11 +72,11 @@ class Note extends Component {
 
   renderForm() {
     return (
-        <div className="note">
+        <div className="note" style={this.style}>
           <form onSubmit={this.save}>
             <textarea ref={(input) => {
               this._newText = input
-            }}/>
+            }} defaultValue={this.props.children}/>
             <button id="save" onClick={this.save}><FaFloppy0/></button>
           </form>
         </div>
@@ -54,7 +86,7 @@ class Note extends Component {
   renderDisplay() {
     //jsx tags
     return (
-        <div className="note">
+        <div className="note" style={this.style}>
           <p>{this.props.children}</p>
           <span>
             <button onClick={this.edit} id="edit"><FaPencil/></button>

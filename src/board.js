@@ -17,6 +17,7 @@ class Board extends Component {
     this.nextId = this.nextId.bind(this);
   }
 
+
 //Now for each item in the notes array we're going to
 // pass in the note and we're going to perform a little check here.
 // So what we're going to say is, if the note id is not equal to 'i',
@@ -48,7 +49,7 @@ class Board extends Component {
   add(text) {
     this.setState((prevState) => (
         {
-          notes:[
+          notes: [
             ...prevState.notes,
             {
               id: this.nextId(),
@@ -66,7 +67,7 @@ class Board extends Component {
   }
 
   eachNote(note, i) {
-    return (<Note key={i} index={i} onChange={this.update} onRemove={this.remove}>{note.note}</Note>)
+    return (<Note key={note.id} index={note.id} onChange={this.update} onRemove={this.remove}>{note.note}</Note>)
   }
 
 
